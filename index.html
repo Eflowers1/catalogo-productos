@@ -3,94 +3,146 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Catálogo de productos</title>
+<title>Joyería · Catálogo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #f6f7f9; --card: #ffffff; --text: #1d2330; --muted: #6b7280;
-    --accent: #2563eb; --danger: #dc2626; --border: #e5e7eb;
+    --fondo: #faf7f2;
+    --tinta: #2a2622;
+    --suave: #8a817a;
+    --oro: #b08d57;
+    --oro-suave: #efe6d6;
+    --linea: #e8e1d6;
+    --blanco: #ffffff;
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans: 'Inter', system-ui, sans-serif;
   }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --bg: #0f1115; --card: #181b22; --text: #e8eaf0; --muted: #9aa3b2;
-      --accent: #60a5fa; --danger: #f87171; --border: #2a2f3a;
-    }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--fondo); color: var(--tinta);
+    font-family: var(--sans); font-weight: 300; line-height: 1.5;
   }
-  :root[data-theme="dark"] {
-    --bg: #0f1115; --card: #181b22; --text: #e8eaf0; --muted: #9aa3b2;
-    --accent: #60a5fa; --danger: #f87171; --border: #2a2f3a;
+  .wrap { max-width: 1140px; margin: 0 auto; padding: 0 20px; }
+
+  /* Encabezado */
+  header { text-align: center; padding: 48px 0 28px; }
+  .marca { font-family: var(--serif); font-size: 2.4rem; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; margin: 0; }
+  .marca-linea { width: 56px; height: 1px; background: var(--oro); margin: 14px auto 0; }
+  .sub { font-size: .8rem; letter-spacing: .3em; text-transform: uppercase; color: var(--suave); margin-top: 12px; }
+
+  .barra { display: flex; gap: 12px; align-items: center; justify-content: center; margin: 28px 0 8px; flex-wrap: wrap; }
+  .buscar {
+    width: min(360px, 100%); padding: 11px 16px; border: 1px solid var(--linea); background: var(--blanco);
+    border-radius: 0; font: inherit; color: var(--tinta); outline: none;
   }
-  body { margin: 0; background: var(--bg); color: var(--text); font-family: system-ui, sans-serif; }
-  .wrap { max-width: 1100px; margin: 0 auto; padding: 16px; }
-  header { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; margin-bottom: 16px; }
-  h1 { font-size: 1.5rem; margin: 0; }
-  .muted { color: var(--muted); font-size: .9rem; }
-  input, textarea, button { font: inherit; }
-  input, textarea {
-    width: 100%; box-sizing: border-box; padding: 8px; border: 1px solid var(--border);
-    border-radius: 8px; background: var(--card); color: var(--text);
+  .buscar:focus { border-color: var(--oro); }
+  .btn-admin {
+    background: none; border: none; color: var(--suave); font: inherit; font-size: .8rem;
+    letter-spacing: .15em; text-transform: uppercase; cursor: pointer; padding: 8px 4px;
   }
-  button {
-    padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border);
-    background: var(--card); color: var(--text); cursor: pointer;
+  .btn-admin:hover { color: var(--oro); }
+
+  #msg { min-height: 1.4em; text-align: center; font-size: .85rem; color: var(--suave); margin: 10px 0; }
+
+  /* Catálogo */
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 28px 22px; padding: 12px 0 64px; }
+  .card { cursor: pointer; background: none; border: none; padding: 0; text-align: left; font: inherit; color: inherit; }
+  .foto {
+    aspect-ratio: 4 / 5; background: linear-gradient(160deg, var(--oro-suave), #f5efe4);
+    display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative;
   }
-  button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
-  button.danger { color: var(--danger); }
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
-  .card {
-    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
-    overflow: hidden; display: flex; flex-direction: column;
+  .foto img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s ease; }
+  .card:hover .foto img { transform: scale(1.03); }
+  .foto .inicial { font-family: var(--serif); font-size: 4rem; color: var(--oro); opacity: .7; }
+  .agotado-tag {
+    position: absolute; top: 12px; left: 12px; background: var(--fondo); color: var(--suave);
+    font-size: .68rem; letter-spacing: .15em; text-transform: uppercase; padding: 4px 8px;
   }
-  .card img { width: 100%; height: 160px; object-fit: cover; background: var(--border); }
-  .card .body { padding: 12px; display: flex; flex-direction: column; gap: 6px; }
-  .precio { font-weight: 700; font-size: 1.1rem; }
-  .admin {
-    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
-    padding: 16px; margin-top: 24px; display: none;
+  .info { padding-top: 14px; text-align: center; }
+  .nombre { font-family: var(--serif); font-size: 1.3rem; font-weight: 500; margin: 0; }
+  .precio { font-size: .95rem; color: var(--oro); margin-top: 4px; letter-spacing: .04em; }
+  .vacio { grid-column: 1 / -1; text-align: center; color: var(--suave); padding: 48px 0; }
+
+  /* Detalle */
+  .modal { position: fixed; inset: 0; background: rgba(42,38,34,.55); display: none; align-items: center; justify-content: center; padding: 20px; z-index: 10; }
+  .modal.abierto { display: flex; }
+  .modal-cuerpo {
+    background: var(--fondo); max-width: 780px; width: 100%; display: grid; grid-template-columns: 1fr 1fr;
+    position: relative; max-height: 90vh; overflow: auto;
   }
-  .admin.open { display: block; }
-  .admin h2 { font-size: 1.2rem; margin-top: 0; }
-  form.prod { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
-  form.prod .full { grid-column: 1 / -1; }
-  form.prod .acciones { grid-column: 1 / -1; display: flex; gap: 8px; }
-  .fila { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--border); }
-  #msg { min-height: 1.2em; font-size: .9rem; color: var(--muted); margin: 8px 0; }
-  @media (max-width: 600px) { form.prod { grid-template-columns: 1fr; } }
+  .modal-cuerpo .foto { aspect-ratio: auto; height: 100%; min-height: 360px; }
+  .modal-texto { padding: 36px 32px; display: flex; flex-direction: column; gap: 12px; justify-content: center; }
+  .modal-texto h2 { font-family: var(--serif); font-size: 2rem; font-weight: 500; margin: 0; }
+  .modal-texto .desc { color: var(--suave); }
+  .cerrar {
+    position: absolute; top: 10px; right: 14px; background: none; border: none; font-size: 1.6rem;
+    color: var(--suave); cursor: pointer; line-height: 1; z-index: 1;
+  }
+  @media (max-width: 640px) {
+    .modal-cuerpo { grid-template-columns: 1fr; }
+    .modal-cuerpo .foto { min-height: 260px; }
+  }
+
+  /* Administración */
+  .admin { display: none; border-top: 1px solid var(--linea); padding: 40px 0 72px; }
+  .admin.abierto { display: block; }
+  .admin h2 { font-family: var(--serif); font-size: 1.8rem; font-weight: 500; margin: 0 0 20px; }
+  form.prod { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 28px; max-width: 760px; }
+  form.prod .completo { grid-column: 1 / -1; }
+  form.prod .acciones { grid-column: 1 / -1; display: flex; gap: 10px; }
+  input, textarea { font: inherit; width: 100%; padding: 10px 12px; border: 1px solid var(--linea); background: var(--blanco); color: var(--tinta); border-radius: 0; }
+  input:focus, textarea:focus { outline: none; border-color: var(--oro); }
+  .btn { font: inherit; font-size: .8rem; letter-spacing: .12em; text-transform: uppercase; padding: 11px 20px; border: 1px solid var(--tinta); background: var(--tinta); color: var(--blanco); cursor: pointer; }
+  .btn.sec { background: none; color: var(--tinta); }
+  .btn.peligro { background: none; color: #9b3d3d; border-color: #9b3d3d; }
+  .fila { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--linea); max-width: 760px; }
+  .fila .datos span { color: var(--suave); font-size: .85rem; margin-left: 8px; }
+  .fila .botones { display: flex; gap: 8px; }
+  .fila .botones .btn { padding: 7px 12px; font-size: .7rem; }
+  @media (max-width: 640px) { form.prod { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
 <div class="wrap">
   <header>
-    <h1>Catálogo de productos</h1>
-    <div style="display:flex; gap:8px; flex-wrap:wrap;">
-      <input id="buscar" placeholder="Buscar producto…" style="width:220px;">
-      <button id="btn-admin">Administrar</button>
+    <h1 class="marca">Joyería</h1>
+    <div class="marca-linea"></div>
+    <p class="sub">Colección</p>
+    <div class="barra">
+      <input id="buscar" class="buscar" placeholder="Buscar pieza…" aria-label="Buscar pieza">
+      <button class="btn-admin" id="btn-admin">Administrar</button>
     </div>
   </header>
 
   <div id="msg"></div>
-  <section id="grid" class="grid"></section>
+  <main id="grid" class="grid"></main>
 
   <section id="admin" class="admin">
-    <h2 id="f-titulo">Nuevo producto</h2>
+    <h2 id="f-titulo">Nueva pieza</h2>
     <form id="form" class="prod">
       <input type="hidden" id="f-id">
-      <div class="full"><input id="f-nombre" placeholder="Nombre" required></div>
-      <div class="full"><textarea id="f-descripcion" rows="3" placeholder="Descripción"></textarea></div>
+      <div class="completo"><input id="f-nombre" placeholder="Nombre de la pieza" required></div>
+      <div class="completo"><textarea id="f-descripcion" rows="3" placeholder="Descripción"></textarea></div>
       <input id="f-precio" type="number" min="0" step="0.01" placeholder="Precio" required>
-      <input id="f-stock" type="number" min="0" step="1" placeholder="Stock">
-      <div class="full"><input id="f-imagen" type="url" placeholder="URL de imagen (https://…)"></div>
+      <input id="f-stock" type="number" min="0" step="1" placeholder="Piezas disponibles">
+      <div class="completo"><input id="f-imagen" type="url" placeholder="URL de la foto (https://…) opcional"></div>
       <div class="acciones">
-        <button class="primary" type="submit">Guardar</button>
-        <button type="button" id="f-cancelar">Limpiar</button>
+        <button class="btn" type="submit">Guardar</button>
+        <button class="btn sec" type="button" id="f-cancelar">Limpiar</button>
       </div>
     </form>
     <div id="admin-lista"></div>
   </section>
 </div>
 
+<div id="modal" class="modal" role="dialog" aria-modal="true">
+  <div class="modal-cuerpo" id="modal-cuerpo"></div>
+</div>
+
 <script>
   // ====== CONFIGURACIÓN ======
-  // Pega aquí la URL del Web App de Apps Script (termina en /exec)
   const API_URL = 'https://script.google.com/macros/s/AKfycbz7jsNiNl5Mn1bPOQKkegkqOhXnWffAAqP-_7QokVyn4kkM_tJSxkSgQ9_HSXNcpAgG9Q/exec';
   const MONEDA = 'MXN';
   const LOCALE = 'es-MX';
@@ -104,16 +156,15 @@
   const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
   }[c]));
-  const fmt = (n) => new Intl.NumberFormat(LOCALE, { style: 'currency', currency: MONEDA }).format(n);
+  const fmt = (n) => new Intl.NumberFormat(LOCALE, { style: 'currency', currency: MONEDA, maximumFractionDigits: 0 }).format(n);
 
   function msg(texto, error = false) {
     const el = $('#msg');
     el.textContent = texto;
-    el.style.color = error ? 'var(--danger)' : 'var(--muted)';
+    el.style.color = error ? '#9b3d3d' : 'var(--suave)';
   }
 
   async function api(metodo, payload) {
-    if (API_URL.startsWith('PEGAR')) throw new Error('Falta configurar API_URL en index.html');
     if (metodo === 'GET') {
       const r = await fetch(API_URL + '?action=listar');
       return r.json();
@@ -128,7 +179,7 @@
   }
 
   async function cargar() {
-    msg('Cargando productos…');
+    msg('Cargando piezas…');
     try {
       const res = await api('GET');
       if (!res.ok) throw new Error(res.error);
@@ -136,53 +187,79 @@
       render();
       msg('');
     } catch (e) {
-      msg('No se pudieron cargar los productos: ' + e.message, true);
+      msg('No se pudo cargar el catálogo: ' + e.message, true);
     }
+  }
+
+  function fotoHTML(p) {
+    const agotado = p.stock <= 0 ? '<span class="agotado-tag">Agotado</span>' : '';
+    const contenido = p.imagen
+      ? `<img src="${esc(p.imagen)}" alt="${esc(p.nombre)}" loading="lazy">`
+      : `<span class="inicial">${esc((p.nombre || '?').charAt(0).toUpperCase())}</span>`;
+    return `<div class="foto">${contenido}${agotado}</div>`;
   }
 
   function render() {
     const q = $('#buscar').value.trim().toLowerCase();
     const lista = productos.filter(p => (p.nombre + ' ' + p.descripcion).toLowerCase().includes(q));
     $('#grid').innerHTML = lista.map(p => `
-      <article class="card">
-        ${p.imagen ? `<img src="${esc(p.imagen)}" alt="${esc(p.nombre)}" loading="lazy">` : ''}
-        <div class="body">
-          <strong>${esc(p.nombre)}</strong>
-          <span class="muted">${esc(p.descripcion)}</span>
-          <span class="precio">${fmt(p.precio)}</span>
-          <span class="muted">${p.stock > 0 ? 'Disponibles: ' + esc(p.stock) : 'Agotado'}</span>
+      <button class="card" data-ver="${esc(p.id)}">
+        ${fotoHTML(p)}
+        <div class="info">
+          <h3 class="nombre">${esc(p.nombre)}</h3>
+          <div class="precio">${fmt(p.precio)}</div>
         </div>
-      </article>`).join('') || '<p class="muted">No hay productos que mostrar.</p>';
+      </button>`).join('') || '<p class="vacio">No encontramos piezas con esa búsqueda.</p>';
     if (adminAbierto) renderAdmin();
   }
+
+  function verDetalle(id) {
+    const p = productos.find(x => x.id === id);
+    if (!p) return;
+    $('#modal-cuerpo').innerHTML = `
+      <button class="cerrar" id="cerrar-modal" aria-label="Cerrar">×</button>
+      ${fotoHTML(p)}
+      <div class="modal-texto">
+        <h2>${esc(p.nombre)}</h2>
+        <div class="precio">${fmt(p.precio)}</div>
+        <p class="desc">${esc(p.descripcion) || 'Pieza de la colección.'}</p>
+        <p class="desc">${p.stock > 0 ? 'Piezas disponibles: ' + esc(p.stock) : 'Por el momento agotada.'}</p>
+      </div>`;
+    $('#modal').classList.add('abierto');
+  }
+
+  function cerrarDetalle() { $('#modal').classList.remove('abierto'); }
 
   function renderAdmin() {
     $('#admin-lista').innerHTML = productos.map(p => `
       <div class="fila">
-        <span>${esc(p.nombre)} <span class="muted">· ${fmt(p.precio)} · stock ${esc(p.stock)}</span></span>
-        <span style="display:flex; gap:6px;">
-          <button data-editar="${esc(p.id)}">Editar</button>
-          <button class="danger" data-borrar="${esc(p.id)}">Quitar</button>
-        </span>
-      </div>`).join('') || '<p class="muted">Sin productos.</p>';
+        <div class="datos">${esc(p.nombre)}<span>${fmt(p.precio)} · stock ${esc(p.stock)}</span></div>
+        <div class="botones">
+          <button class="btn sec" data-editar="${esc(p.id)}">Editar</button>
+          <button class="btn peligro" data-borrar="${esc(p.id)}">Quitar</button>
+        </div>
+      </div>`).join('') || '<p class="vacio">Aún no hay piezas.</p>';
   }
 
   function toggleAdmin() {
-    if (!token) {
+    if (!adminAbierto && !token) {
       const t = prompt('Clave de administración:');
       if (!t) return;
       token = t.trim();
       sessionStorage.setItem('token', token);
     }
     adminAbierto = !adminAbierto;
-    $('#admin').classList.toggle('open', adminAbierto);
-    if (adminAbierto) renderAdmin();
+    $('#admin').classList.toggle('abierto', adminAbierto);
+    if (adminAbierto) {
+      renderAdmin();
+      $('#admin').scrollIntoView({ behavior: 'smooth' });
+    }
   }
 
   function limpiarForm() {
     $('#f-id').value = '';
     ['nombre', 'descripcion', 'precio', 'stock', 'imagen'].forEach(c => $('#f-' + c).value = '');
-    $('#f-titulo').textContent = 'Nuevo producto';
+    $('#f-titulo').textContent = 'Nueva pieza';
   }
 
   function editar(id) {
@@ -210,7 +287,7 @@
         throw new Error(res.error);
       }
       await cargar();
-      msg('Listo ✔');
+      msg('Cambios guardados');
     } catch (e) {
       msg('Error: ' + e.message, true);
     }
@@ -233,7 +310,7 @@
 
   async function quitar(id) {
     const p = productos.find(x => x.id === id);
-    if (!p || !confirm(`¿Quitar "${p.nombre}" del catálogo?`)) return;
+    if (!p || !confirm(`¿Quitar "${p.nombre}" de la colección?`)) return;
     await ejecutar('borrar', { id });
   }
 
@@ -242,6 +319,14 @@
   $('#btn-admin').addEventListener('click', toggleAdmin);
   $('#form').addEventListener('submit', guardar);
   $('#f-cancelar').addEventListener('click', limpiarForm);
+  $('#grid').addEventListener('click', (ev) => {
+    const card = ev.target.closest('[data-ver]');
+    if (card) verDetalle(card.dataset.ver);
+  });
+  $('#modal').addEventListener('click', (ev) => {
+    if (ev.target.id === 'modal' || ev.target.id === 'cerrar-modal') cerrarDetalle();
+  });
+  document.addEventListener('keydown', (ev) => { if (ev.key === 'Escape') cerrarDetalle(); });
   $('#admin-lista').addEventListener('click', (ev) => {
     const ed = ev.target.dataset.editar;
     const bo = ev.target.dataset.borrar;
