@@ -112,7 +112,6 @@
     <p class="sub">Colección</p>
     <div class="barra">
       <input id="buscar" class="buscar" placeholder="Buscar pieza…" aria-label="Buscar pieza">
-      <button class="btn-admin" id="btn-admin">Administrar</button>
     </div>
   </header>
 
@@ -316,7 +315,6 @@
 
   // ====== EVENTOS ======
   $('#buscar').addEventListener('input', render);
-  $('#btn-admin').addEventListener('click', toggleAdmin);
   $('#form').addEventListener('submit', guardar);
   $('#f-cancelar').addEventListener('click', limpiarForm);
   $('#grid').addEventListener('click', (ev) => {
@@ -333,6 +331,9 @@
     if (ed) editar(ed);
     if (bo) quitar(bo);
   });
+
+  // El panel de administración no tiene botón visible: se abre solo con la dirección …/catalogo-productos/#admin
+  if (location.hash === '#admin') toggleAdmin();
 
   cargar();
 </script>
