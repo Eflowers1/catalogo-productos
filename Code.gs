@@ -192,6 +192,30 @@ function listarPedidos_() {
 function marcarPagado_(folio) {
   const ped = buscarPedido_(folio);
   if (ped.estado !== 'pendiente') throw new Error('El pedido ya no está pendiente');
+  descontarStock_(ped);
+  hojaPedidos_().getRange(ped.fila, COLUMNAS_PEDIDOS.indexOf('estado') + 1).setValue('pagado');
+  return { folio: ped.folio };
+}
+
+// Se ejecuta sola al editar la hoja: si cambias un pedido de "pendiente" a "pagado", se descuenta el stock.
+// Así también puedes administrar pedidos directamente desde el Sheet.
+function onEdit(e) {
+  if (!e || !e.range) return;
+  if (e.range.getSheet().getName() !== NOMBRE_PEDIDOS) return;
+  if (e.range.getColumn() !== COLUMNAS_PEDIDOS.indexOf('estado') + 1) return;
+  if (e.value !== 'pagado' || e.oldValue !== 'pendiente') return;
+  const lock = LockService.getScriptLock();
+  try {
+    lock.waitLock(15000);
+    const ped = leerPedidos_().find(p => p.fila === e.range.getRow());
+    if (ped) descontarStock_(ped);
+  } finally {
+    if (lock.hasLock()) lock.releaseLock();
+  }
+}
+
+// Sin bloqueo propio: quien la llama ya debe tener el lock
+function descontarStock_(ped) {
   JSON.parse(ped.lineas).forEach(l => {
     const p = leerProductos_().find(x => String(x.id) === String(l.id));
     if (p) {
@@ -199,8 +223,6 @@ function marcarPagado_(folio) {
         .setValue(Math.max(0, Number(p.stock) - l.cantidad));
     }
   });
-  hojaPedidos_().getRange(ped.fila, COLUMNAS_PEDIDOS.indexOf('estado') + 1).setValue('pagado');
-  return { folio: ped.folio };
 }
 
 function cancelarPedido_(folio) {

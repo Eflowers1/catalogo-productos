@@ -43,6 +43,12 @@ En `index.html`, sección `PAGO Y CONTACTO`:
 3. Catálogo en `https://TU-USUARIO.github.io/NOMBRE-REPO/`.
 4. Panel de administración: `https://TU-USUARIO.github.io/NOMBRE-REPO/#admin` (no aparece ningún botón para llegar a él).
 
+## Administrar desde la hoja
+
+- **Piezas:** precio, stock, categoría, imagen (URL) y `activo` se editan en la pestaña `Productos`. El catálogo se actualiza solo al recargar.
+- **Pedidos:** en la pestaña `Pedidos`, cambia `estado` de `pendiente` a `pagado` y el stock se descuenta solo (función `onEdit`). Si cambias a `cancelado`, las piezas quedan libres.
+- El panel `#admin` hace lo mismo, con botones.
+
 ## Notas
 
 - **Cambios en `Code.gs`:** hay que publicar una nueva versión, como en el paso 3.
