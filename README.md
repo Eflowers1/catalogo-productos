@@ -1,47 +1,53 @@
-# Catálogo de productos (gratis)
+# Catálogo de joyería (gratis)
 
 - **Frontend:** `index.html` → GitHub Pages
-- **Backend:** `Code.gs` → Google Apps Script (Web App)
-- **Base de datos:** Google Sheet con una hoja llamada `Productos`
+- **Backend:** `Code.gs` → Google Apps Script (Web App), vive dentro del Google Sheet
+- **Base de datos:** Google Sheet con dos pestañas: `Productos` y `Pedidos`
+- **Fotos:** carpeta `img/` de este repo (fotos de prueba) y/o Google Drive (fotos subidas desde el panel)
 
-La página es pública para ver el catálogo. Para agregar, editar o quitar productos se pide una clave de administración que solo conocen las 2 personas que editan.
+## Qué hace
 
-## 1. Crear la hoja
+- Catálogo con filtros por categoría y buscador.
+- Carrito con varias piezas y cantidades limitadas al stock.
+- Al hacer el pedido se registra un **folio** en la pestaña `Pedidos`, con el total calculado por el servidor.
+- El cliente ve los datos para transferir y envía el comprobante por WhatsApp con el folio.
+- Panel de administración (oculto, se abre con `#admin`):
+  - **Pedidos:** marcar pagado (descuenta stock) o cancelar (libera las piezas).
+  - **Piezas:** agregar, editar, quitar y subir fotos desde el equipo.
 
-1. Crea un Google Sheet en tu Drive (puedes convertir tu Excel: Archivo → Guardar como → Google Sheets).
-2. La hoja se llama `Productos` (si no existe, el script la crea con los encabezados al primer uso).
-3. Comparte el Sheet con las 2 personas que editan, como **Editor**.
+## 1. Configurar datos de pago y WhatsApp
 
-## 2. Pegar el backend
+En `index.html`, sección `PAGO Y CONTACTO`:
+- `WHATSAPP`: código de país + número, solo dígitos (ej. `5215512345678`).
+- `PAGO`: banco, titular y CLABE.
 
-1. En el Sheet: **Extensiones → Apps Script**.
-2. Borra el contenido y pega `Code.gs`. Guarda.
-3. **Configuración del proyecto** (engranaje) → **Propiedades de secuencia de comandos** → **Agregar propiedad**:
+## 2. Hoja de cálculo
+
+1. Pestaña `Productos` con las columnas: `id, nombre, descripcion, precio, stock, imagen, activo, actualizado, categoria`.
+2. La pestaña `Pedidos` se crea sola la primera vez.
+
+## 3. Backend (Apps Script)
+
+1. En el Sheet: **Extensiones → Apps Script**. Pega el contenido de `Code.gs`.
+2. **Configuración del proyecto → Propiedades de secuencia de comandos → Agregar propiedad**:
    - Nombre: `TOKEN`
-   - Valor: una clave larga y difícil de adivinar (es la clave de administración).
+   - Valor: una frase larga que solo ustedes conozcan (es la clave del panel).
+3. **Implementar → Gestionar implementaciones → editar → Versión nueva → Implementar.** La URL no cambia.
+   - La primera vez, o cuando se agregan permisos nuevos (Drive para las fotos), Google pedirá autorizar de nuevo. Si aparece "app no verificada": Configuración avanzada → ir al proyecto.
+4. Si cambió la URL, pégala en `API_URL` de `index.html`.
 
-## 3. Publicar el Web App
+## 4. Publicar en GitHub Pages
 
-1. **Implementar → Nueva implementación → Tipo: Aplicación web**.
-2. **Ejecutar como:** Yo.
-3. **Quién tiene acceso:** Cualquier usuario.
-4. Autoriza los permisos (si aparece "app no verificada": Configuración avanzada → ir al proyecto).
-5. Copia la URL que termina en `/exec`.
-
-## 4. Conectar el frontend
-
-1. Abre `index.html` y reemplaza `PEGAR_AQUI_LA_URL_DEL_WEB_APP` por esa URL.
-2. Si tu moneda o idioma no es MXN / es-MX, cambia `MONEDA` y `LOCALE` en la misma sección.
-
-## 5. Publicar en GitHub Pages
-
-1. Crea un repositorio **público** en GitHub y sube `index.html` (y `Code.gs` si quieres tenerlo versionado).
+1. Repositorio público con `index.html`, `Code.gs`, `img/` y este README.
 2. **Settings → Pages → Source:** rama `main`, carpeta `/ (root)`.
-3. Tu catálogo quedará en `https://TU-USUARIO.github.io/NOMBRE-REPO/`.
+3. Catálogo en `https://TU-USUARIO.github.io/NOMBRE-REPO/`.
+4. Panel de administración: `https://TU-USUARIO.github.io/NOMBRE-REPO/#admin` (no aparece ningún botón para llegar a él).
 
 ## Notas
 
-- **Cambios en `Code.gs`:** después de editarlo hay que hacer **Implementar → Administrar implementaciones → Editar → Nueva versión**. Si no, el cambio no se aplica.
-- **Borrar:** el botón "Quitar" no elimina la fila; marca `activo = FALSE` y el producto deja de mostrarse.
+- **Cambios en `Code.gs`:** hay que publicar una nueva versión, como en el paso 3.
+- **Pedidos pendientes reservan piezas:** mientras un pedido esté pendiente, sus piezas no se pueden volver a pedir. Al marcarlo pagado se descuenta el stock; al cancelarlo, se libera.
+- **Borrar piezas:** "Quitar" no borra la fila; la marca como inactiva.
 - **Clave:** se pide una vez por sesión del navegador y se guarda solo ahí. No está en el HTML.
-- **Cuotas gratuitas:** de sobra para un catálogo con 2 editores y visitas ocasionales.
+- **Ocultar no es seguridad:** el panel sale de la página principal, pero quien tenga la dirección `#admin` puede intentar entrar. La protección real es la clave `TOKEN`.
+- **Zona horaria** de los folios: `ZONA_HORARIA` en `Code.gs`.

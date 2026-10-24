@@ -4,6 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Joyería · Catálogo</title>
+<meta name="description" content="Colección de joyería en plata y oro. Compra por transferencia y acuerda la entrega por WhatsApp.">
+<meta property="og:title" content="Joyería · Catálogo">
+<meta property="og:description" content="Colección de joyería en plata y oro. Compra por transferencia y acuerda la entrega por WhatsApp.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://eflowers1.github.io/catalogo-productos/">
+<meta property="og:image" content="https://eflowers1.github.io/catalogo-productos/img/anillo-luna.jpg">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23faf7f2'/%3E%3Cpath d='M16 5 L27 16 L16 27 L5 16 Z' fill='%23b08d57'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
@@ -16,6 +23,7 @@
     --oro-suave: #efe6d6;
     --linea: #e8e1d6;
     --blanco: #ffffff;
+    --peligro: #9b3d3d;
     --serif: 'Cormorant Garamond', Georgia, serif;
     --sans: 'Inter', system-ui, sans-serif;
   }
@@ -24,30 +32,31 @@
     margin: 0; background: var(--fondo); color: var(--tinta);
     font-family: var(--sans); font-weight: 300; line-height: 1.5;
   }
+  [hidden] { display: none !important; }
   .wrap { max-width: 1140px; margin: 0 auto; padding: 0 20px; }
 
   /* Encabezado */
-  header { text-align: center; padding: 48px 0 28px; }
+  header { text-align: center; padding: 48px 0 24px; }
   .marca { font-family: var(--serif); font-size: 2.4rem; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; margin: 0; }
   .marca-linea { width: 56px; height: 1px; background: var(--oro); margin: 14px auto 0; }
   .sub { font-size: .8rem; letter-spacing: .3em; text-transform: uppercase; color: var(--suave); margin-top: 12px; }
-
-  .barra { display: flex; gap: 12px; align-items: center; justify-content: center; margin: 28px 0 8px; flex-wrap: wrap; }
+  .barra { display: flex; gap: 12px; align-items: center; justify-content: center; margin: 28px 0 0; flex-wrap: wrap; }
   .buscar {
     width: min(360px, 100%); padding: 11px 16px; border: 1px solid var(--linea); background: var(--blanco);
-    border-radius: 0; font: inherit; color: var(--tinta); outline: none;
+    font: inherit; color: var(--tinta); outline: none; border-radius: 0;
   }
   .buscar:focus { border-color: var(--oro); }
-  .btn-admin {
-    background: none; border: none; color: var(--suave); font: inherit; font-size: .8rem;
-    letter-spacing: .15em; text-transform: uppercase; cursor: pointer; padding: 8px 4px;
+  .filtros { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 18px; }
+  .chip {
+    font: inherit; font-size: .75rem; letter-spacing: .12em; text-transform: uppercase; background: none;
+    border: 1px solid var(--linea); padding: 7px 14px; cursor: pointer; color: var(--suave);
   }
-  .btn-admin:hover { color: var(--oro); }
+  .chip.activo { border-color: var(--tinta); color: var(--tinta); }
 
   #msg { min-height: 1.4em; text-align: center; font-size: .85rem; color: var(--suave); margin: 10px 0; }
 
   /* Catálogo */
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 28px 22px; padding: 12px 0 64px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 28px 22px; padding: 12px 0 56px; }
   .card { cursor: pointer; background: none; border: none; padding: 0; text-align: left; font: inherit; color: inherit; }
   .foto {
     aspect-ratio: 4 / 5; background: linear-gradient(160deg, var(--oro-suave), #f5efe4);
@@ -64,49 +73,80 @@
   .nombre { font-family: var(--serif); font-size: 1.3rem; font-weight: 500; margin: 0; }
   .precio { font-size: .95rem; color: var(--oro); margin-top: 4px; letter-spacing: .04em; }
   .vacio { grid-column: 1 / -1; text-align: center; color: var(--suave); padding: 48px 0; }
+  .muted, .desc { color: var(--suave); }
 
-  /* Detalle */
+  /* Botones */
+  .btn {
+    font: inherit; font-size: .8rem; letter-spacing: .12em; text-transform: uppercase; padding: 11px 20px;
+    border: 1px solid var(--tinta); background: var(--tinta); color: var(--blanco); cursor: pointer;
+    display: inline-block; text-align: center; text-decoration: none;
+  }
+  .btn.sec { background: none; color: var(--tinta); }
+  .btn.peligro { background: none; color: var(--peligro); border-color: var(--peligro); }
+  .btn:disabled { opacity: .5; cursor: default; }
+
+  /* Modal */
   .modal { position: fixed; inset: 0; background: rgba(42,38,34,.55); display: none; align-items: center; justify-content: center; padding: 20px; z-index: 10; }
   .modal.abierto { display: flex; }
   .modal-cuerpo {
     background: var(--fondo); max-width: 780px; width: 100%; display: grid; grid-template-columns: 1fr 1fr;
     position: relative; max-height: 90vh; overflow: auto;
   }
+  .modal-cuerpo.ancho { grid-template-columns: 1fr; max-width: 560px; }
   .modal-cuerpo .foto { aspect-ratio: auto; height: 100%; min-height: 360px; }
   .modal-texto { padding: 36px 32px; display: flex; flex-direction: column; gap: 12px; justify-content: center; }
-  .modal-texto h2 { font-family: var(--serif); font-size: 2rem; font-weight: 500; margin: 0; }
-  .modal-texto .desc { color: var(--suave); }
-  .compra { display: grid; gap: 12px; margin-top: 8px; }
-  .compra label { display: grid; gap: 6px; }
-  .compra input { max-width: 120px; }
-  .compra .btn { text-align: center; text-decoration: none; display: inline-block; }
-  #c-detalle { display: grid; gap: 10px; }
-  #c-detalle[hidden], #c-comprar[hidden] { display: none; }
+  .modal-texto h2, .carrito h2 { font-family: var(--serif); font-size: 2rem; font-weight: 500; margin: 0; }
+  .carrito { padding: 36px 32px; display: grid; gap: 14px; }
   .cerrar {
     position: absolute; top: 10px; right: 14px; background: none; border: none; font-size: 1.6rem;
     color: var(--suave); cursor: pointer; line-height: 1; z-index: 1;
   }
+  .agregar { display: grid; gap: 10px; margin-top: 6px; }
+  .agregar label, .campo { display: grid; gap: 6px; }
+  .linea { display: flex; justify-content: space-between; gap: 12px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--linea); }
+  .controles { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+  .controles .btn { padding: 6px 10px; }
+  .total { font-size: 1.1rem; display: flex; justify-content: space-between; margin: 6px 0 0; }
+  .toast {
+    position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 20px); background: var(--tinta); color: #fff;
+    padding: 12px 18px; opacity: 0; transition: all .3s; pointer-events: none; font-size: .9rem; z-index: 20;
+  }
+  .toast.visible { opacity: 1; transform: translate(-50%, 0); }
   @media (max-width: 640px) {
     .modal-cuerpo { grid-template-columns: 1fr; }
     .modal-cuerpo .foto { min-height: 260px; }
+    .modal-texto, .carrito { padding: 28px 22px; }
   }
 
   /* Administración */
   .admin { display: none; border-top: 1px solid var(--linea); padding: 40px 0 72px; }
   .admin.abierto { display: block; }
   .admin h2 { font-family: var(--serif); font-size: 1.8rem; font-weight: 500; margin: 0 0 20px; }
+  .login-form { display: flex; gap: 10px; max-width: 460px; flex-wrap: wrap; }
+  .login-form input { flex: 1 1 220px; }
+  .admin-tabs { display: flex; gap: 18px; align-items: center; margin-bottom: 24px; border-bottom: 1px solid var(--linea); flex-wrap: wrap; }
+  .tab {
+    background: none; border: none; font: inherit; font-size: .8rem; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--suave); padding: 8px 4px; cursor: pointer; border-bottom: 1px solid transparent;
+  }
+  .tab.activo { color: var(--tinta); border-bottom-color: var(--oro); }
+  .admin-tabs .btn { margin-left: auto; }
+  input, textarea, select { font: inherit; width: 100%; padding: 10px 12px; border: 1px solid var(--linea); background: var(--blanco); color: var(--tinta); border-radius: 0; }
+  input:focus, textarea:focus { outline: none; border-color: var(--oro); }
   form.prod { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 28px; max-width: 760px; }
   form.prod .completo { grid-column: 1 / -1; }
-  form.prod .acciones { grid-column: 1 / -1; display: flex; gap: 10px; }
-  input, textarea { font: inherit; width: 100%; padding: 10px 12px; border: 1px solid var(--linea); background: var(--blanco); color: var(--tinta); border-radius: 0; }
-  input:focus, textarea:focus { outline: none; border-color: var(--oro); }
-  .btn { font: inherit; font-size: .8rem; letter-spacing: .12em; text-transform: uppercase; padding: 11px 20px; border: 1px solid var(--tinta); background: var(--tinta); color: var(--blanco); cursor: pointer; }
-  .btn.sec { background: none; color: var(--tinta); }
-  .btn.peligro { background: none; color: #9b3d3d; border-color: #9b3d3d; }
-  .fila { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--linea); max-width: 760px; }
+  form.prod .acciones { grid-column: 1 / -1; display: flex; gap: 10px; flex-wrap: wrap; }
+  .fila { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--linea); max-width: 760px; flex-wrap: wrap; }
   .fila .datos span { color: var(--suave); font-size: .85rem; margin-left: 8px; }
-  .fila .botones { display: flex; gap: 8px; }
+  .fila .botones, .botones { display: flex; gap: 8px; flex-wrap: wrap; }
   .fila .botones .btn { padding: 7px 12px; font-size: .7rem; }
+  .pedido { border-bottom: 1px solid var(--linea); padding: 16px 0; display: grid; gap: 6px; max-width: 760px; }
+  .pedido-cab { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .pedido-lineas { margin: 0; padding-left: 18px; font-size: .9rem; }
+  .estado { font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; padding: 3px 8px; border: 1px solid var(--linea); color: var(--suave); }
+  .estado.pendiente { color: #9a6b1f; border-color: #d9b679; }
+  .estado.pagado { color: #2f6b3a; border-color: #9cc5a3; }
+  .estado.cancelado { color: var(--suave); }
   @media (max-width: 640px) { form.prod { grid-template-columns: 1fr; } }
 </style>
 </head>
@@ -118,33 +158,65 @@
     <p class="sub">Colección</p>
     <div class="barra">
       <input id="buscar" class="buscar" placeholder="Buscar pieza…" aria-label="Buscar pieza">
+      <button class="btn sec" id="btn-carrito" type="button">Carrito (<span id="contador">0</span>)</button>
     </div>
+    <nav id="filtros" class="filtros" aria-label="Categorías"></nav>
   </header>
 
   <div id="msg"></div>
   <main id="grid" class="grid"></main>
 
   <section id="admin" class="admin">
-    <h2 id="f-titulo">Nueva pieza</h2>
-    <form id="form" class="prod">
-      <input type="hidden" id="f-id">
-      <div class="completo"><input id="f-nombre" placeholder="Nombre de la pieza" required></div>
-      <div class="completo"><textarea id="f-descripcion" rows="3" placeholder="Descripción"></textarea></div>
-      <input id="f-precio" type="number" min="0" step="0.01" placeholder="Precio" required>
-      <input id="f-stock" type="number" min="0" step="1" placeholder="Piezas disponibles">
-      <div class="completo"><input id="f-imagen" type="url" placeholder="URL de la foto (https://…) opcional"></div>
-      <div class="acciones">
-        <button class="btn" type="submit">Guardar</button>
-        <button class="btn sec" type="button" id="f-cancelar">Limpiar</button>
+    <div id="admin-login" hidden>
+      <h2>Acceso</h2>
+      <form id="form-login" class="login-form">
+        <input id="l-clave" type="password" placeholder="Clave de administración" autocomplete="current-password" required>
+        <button class="btn" type="submit">Entrar</button>
+      </form>
+    </div>
+
+    <div id="admin-panel" hidden>
+      <div class="admin-tabs">
+        <button class="tab activo" data-tab="pedidos" type="button">Pedidos</button>
+        <button class="tab" data-tab="piezas" type="button">Piezas</button>
+        <button class="btn sec" id="salir-admin" type="button">Salir</button>
       </div>
-    </form>
-    <div id="admin-lista"></div>
+
+      <div id="tab-pedidos">
+        <div id="pedidos-lista"></div>
+      </div>
+
+      <div id="tab-piezas" hidden>
+        <h2 id="f-titulo">Nueva pieza</h2>
+        <form id="form" class="prod">
+          <input type="hidden" id="f-id">
+          <div class="completo"><input id="f-nombre" placeholder="Nombre de la pieza" required></div>
+          <div class="completo"><textarea id="f-descripcion" rows="3" placeholder="Descripción"></textarea></div>
+          <input id="f-precio" type="number" min="0" step="0.01" placeholder="Precio" required>
+          <input id="f-stock" type="number" min="0" step="1" placeholder="Piezas disponibles">
+          <input id="f-categoria" list="cats" placeholder="Categoría (anillos, aretes…)">
+          <datalist id="cats"></datalist>
+          <div class="completo"><input id="f-imagen" type="url" placeholder="URL de la foto (opcional)"></div>
+          <div class="completo campo">
+            <label class="desc">o sube una foto desde tu equipo
+              <input id="f-foto" type="file" accept="image/*">
+            </label>
+          </div>
+          <div class="acciones">
+            <button class="btn" type="submit">Guardar</button>
+            <button class="btn sec" type="button" id="f-cancelar">Limpiar</button>
+          </div>
+        </form>
+        <div id="admin-lista"></div>
+      </div>
+    </div>
   </section>
 </div>
 
 <div id="modal" class="modal" role="dialog" aria-modal="true">
   <div class="modal-cuerpo" id="modal-cuerpo"></div>
 </div>
+<div id="toast" class="toast" role="status"></div>
 
 <script>
   // ====== CONFIGURACIÓN ======
@@ -159,19 +231,40 @@
   // ===========================
 
   let productos = [];
+  let categoriaActiva = 'todas';
   let adminAbierto = false;
   let token = sessionStorage.getItem('token') || '';
+  let carrito = leerCarrito();
 
   const $ = (sel) => document.querySelector(sel);
   const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
   }[c]));
-  const fmt = (n) => new Intl.NumberFormat(LOCALE, { style: 'currency', currency: MONEDA, maximumFractionDigits: 0 }).format(n);
+  const fmt = (n) => new Intl.NumberFormat(LOCALE, { style: 'currency', currency: MONEDA, maximumFractionDigits: 2 }).format(n);
+  const capitalizar = (s) => s ? s.charAt(0).toUpperCase() + s.slice(1) : '';
+
+  // ---------- Utilidades ----------
 
   function msg(texto, error = false) {
     const el = $('#msg');
     el.textContent = texto;
-    el.style.color = error ? '#9b3d3d' : 'var(--suave)';
+    el.style.color = error ? 'var(--peligro)' : 'var(--suave)';
+  }
+
+  function toast(texto) {
+    const t = $('#toast');
+    t.textContent = texto;
+    t.classList.add('visible');
+    clearTimeout(toast.timer);
+    toast.timer = setTimeout(() => t.classList.remove('visible'), 2400);
+  }
+
+  function leerCarrito() {
+    try { return JSON.parse(localStorage.getItem('carrito')) || {}; } catch (e) { return {}; }
+  }
+
+  function guardarCarrito() {
+    try { localStorage.setItem('carrito', JSON.stringify(carrito)); } catch (e) { /* almacenamiento bloqueado */ }
   }
 
   async function api(metodo, payload) {
@@ -188,17 +281,58 @@
     return r.json();
   }
 
+  function comprimir(archivo, maximo = 1000) {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => {
+        const escala = Math.min(1, maximo / Math.max(img.width, img.height));
+        const c = document.createElement('canvas');
+        c.width = Math.round(img.width * escala);
+        c.height = Math.round(img.height * escala);
+        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+        URL.revokeObjectURL(img.src);
+        resolve(c.toDataURL('image/jpeg', 0.85).split(',')[1]);
+      };
+      img.onerror = () => reject(new Error('No se pudo leer la imagen'));
+      img.src = URL.createObjectURL(archivo);
+    });
+  }
+
+  // ---------- Catálogo ----------
+
   async function cargar() {
     msg('Cargando piezas…');
     try {
       const res = await api('GET');
       if (!res.ok) throw new Error(res.error);
       productos = res.data;
+      // Ajusta el carrito a lo que hay disponible ahora
+      Object.keys(carrito).forEach(id => {
+        const p = productos.find(x => x.id === id);
+        if (!p) delete carrito[id];
+        else if (carrito[id] > p.stock) carrito[id] = p.stock;
+        if (carrito[id] <= 0) delete carrito[id];
+      });
+      guardarCarrito();
+      renderFiltros();
       render();
+      actualizarContador();
       msg('');
     } catch (e) {
       msg('No se pudo cargar el catálogo: ' + e.message, true);
     }
+  }
+
+  function categorias() {
+    return [...new Set(productos.map(p => p.categoria).filter(Boolean))].sort();
+  }
+
+  function renderFiltros() {
+    const opciones = ['todas', ...categorias()];
+    $('#filtros').innerHTML = opciones.map(c => `
+      <button class="chip ${c === categoriaActiva ? 'activo' : ''}" type="button" data-cat="${esc(c)}">
+        ${c === 'todas' ? 'Todas' : esc(capitalizar(c))}
+      </button>`).join('');
   }
 
   function fotoHTML(p) {
@@ -211,98 +345,247 @@
 
   function render() {
     const q = $('#buscar').value.trim().toLowerCase();
-    const lista = productos.filter(p => (p.nombre + ' ' + p.descripcion).toLowerCase().includes(q));
+    const lista = productos.filter(p =>
+      (categoriaActiva === 'todas' || p.categoria === categoriaActiva) &&
+      (p.nombre + ' ' + p.descripcion).toLowerCase().includes(q)
+    );
     $('#grid').innerHTML = lista.map(p => `
-      <button class="card" data-ver="${esc(p.id)}">
+      <button class="card" type="button" data-ver="${esc(p.id)}">
         ${fotoHTML(p)}
         <div class="info">
           <h3 class="nombre">${esc(p.nombre)}</h3>
           <div class="precio">${fmt(p.precio)}</div>
         </div>
       </button>`).join('') || '<p class="vacio">No encontramos piezas con esa búsqueda.</p>';
-    if (adminAbierto) renderAdmin();
+    if (adminAbierto && !$('#tab-piezas').hidden) renderAdmin();
   }
 
-  function verDetalle(id) {
+  // ---------- Modal ----------
+
+  function abrirModal(html, clase = '') {
+    const cuerpo = $('#modal-cuerpo');
+    cuerpo.className = 'modal-cuerpo ' + clase;
+    cuerpo.innerHTML = `<button class="cerrar" id="cerrar-modal" type="button" aria-label="Cerrar">×</button>` + html;
+    $('#modal').classList.add('abierto');
+  }
+
+  function cerrarModal() {
+    $('#modal').classList.remove('abierto');
+  }
+
+  function verProducto(id) {
     const p = productos.find(x => x.id === id);
     if (!p) return;
-    const disponible = p.stock > 0;
-    $('#modal-cuerpo').dataset.id = p.id;
-    $('#modal-cuerpo').innerHTML = `
-      <button class="cerrar" id="cerrar-modal" aria-label="Cerrar">×</button>
+    const libres = Math.max(0, Number(p.stock) - (carrito[id] || 0));
+    abrirModal(`
       ${fotoHTML(p)}
       <div class="modal-texto">
         <h2>${esc(p.nombre)}</h2>
         <div class="precio">${fmt(p.precio)}</div>
         <p class="desc">${esc(p.descripcion) || 'Pieza de la colección.'}</p>
-        <p class="desc">${disponible ? 'Piezas disponibles: ' + esc(p.stock) : 'Por el momento agotada.'}</p>
-        ${disponible ? compraHTML(p) : ''}
-      </div>`;
-    $('#modal').classList.add('abierto');
+        ${p.stock > 0 ? `<p class="desc">Piezas disponibles: ${esc(p.stock)}</p>` : '<p class="desc">Por el momento agotada.</p>'}
+        ${libres > 0 ? `
+          <div class="agregar">
+            <label class="desc">Cantidad
+              <input id="p-cantidad" type="number" min="1" max="${libres}" value="1">
+            </label>
+            <button class="btn" type="button" data-accion="agregar" data-id="${esc(p.id)}">Agregar al carrito</button>
+          </div>` : ''}
+      </div>`);
   }
 
-  function compraHTML(p) {
-    return `
-      <div class="compra">
-        <label class="desc">Cantidad
-          <input id="c-cantidad" type="number" min="1" max="${esc(p.stock)}" value="1">
-        </label>
-        <button class="btn" id="c-comprar" type="button">Comprar por transferencia</button>
-        <div id="c-detalle" hidden>
-          <p class="desc">Total: <strong id="c-total"></strong></p>
-          <p class="desc">Haz tu transferencia a:<br>
-            Banco: ${esc(PAGO.banco)}<br>
-            Titular: ${esc(PAGO.titular)}<br>
-            CLABE: ${esc(PAGO.clabe)}</p>
-          <p class="desc">Cuando tengas tu comprobante, envíalo por WhatsApp para acordar la entrega.</p>
-          <a id="c-wa" class="btn" target="_blank" rel="noopener">Enviar comprobante por WhatsApp</a>
-        </div>
-      </div>`;
+  // ---------- Carrito ----------
+
+  function lineasCarrito() {
+    return Object.entries(carrito)
+      .map(([id, cantidad]) => {
+        const p = productos.find(x => x.id === id);
+        return p ? { p, cantidad } : null;
+      })
+      .filter(Boolean);
   }
 
-  // Calcula el total y el enlace de WhatsApp con la cantidad elegida
-  function actualizarCompra() {
-    const p = productos.find(x => x.id === $('#modal-cuerpo').dataset.id);
+  function totalCarrito() {
+    return lineasCarrito().reduce((suma, l) => suma + l.p.precio * l.cantidad, 0);
+  }
+
+  function actualizarContador() {
+    $('#contador').textContent = Object.values(carrito).reduce((suma, n) => suma + n, 0);
+  }
+
+  function agregarAlCarrito(id) {
+    const p = productos.find(x => x.id === id);
     if (!p) return;
-    const cant = Math.min(Math.max(1, Math.floor(Number($('#c-cantidad').value) || 1)), Number(p.stock));
-    $('#c-cantidad').value = cant;
-    const total = cant * p.precio;
-    $('#c-total').textContent = fmt(total);
-    const texto = `Hola, ya hice el pago por transferencia de ${cant} x ${p.nombre}. Total: ${fmt(total)}. Te mando el comprobante. ¿Acordamos la entrega?`;
-    $('#c-wa').href = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(texto)}`;
+    const pedido = Math.floor(Number($('#p-cantidad').value)) || 1;
+    const enCarrito = carrito[id] || 0;
+    const nuevo = Math.min(enCarrito + pedido, Number(p.stock));
+    if (nuevo <= enCarrito) return toast('Ya tienes todas las piezas disponibles');
+    carrito[id] = nuevo;
+    guardarCarrito();
+    actualizarContador();
+    cerrarModal();
+    toast(`Agregada: ${p.nombre}`);
   }
 
-  function cerrarDetalle() { $('#modal').classList.remove('abierto'); }
+  function cambiarCantidad(id, delta) {
+    const p = productos.find(x => x.id === id);
+    if (!p) return;
+    const nuevo = (carrito[id] || 0) + delta;
+    if (nuevo <= 0) delete carrito[id];
+    else if (nuevo > p.stock) return toast('No hay más piezas disponibles');
+    else carrito[id] = nuevo;
+    guardarCarrito();
+    actualizarContador();
+    verCarrito();
+  }
+
+  function verCarrito() {
+    const lineas = lineasCarrito();
+    abrirModal(`
+      <div class="carrito">
+        <h2>Tu carrito</h2>
+        ${lineas.length ? `
+          ${lineas.map(({ p, cantidad }) => `
+            <div class="linea">
+              <div><strong>${esc(p.nombre)}</strong><div class="desc">${fmt(p.precio)} c/u</div></div>
+              <div class="controles">
+                <button type="button" class="btn sec" data-accion="qmenos" data-id="${esc(p.id)}">−</button>
+                <span>${cantidad}</span>
+                <button type="button" class="btn sec" data-accion="qmas" data-id="${esc(p.id)}" ${cantidad >= p.stock ? 'disabled' : ''}>+</button>
+                <button type="button" class="btn peligro" data-accion="quitar" data-id="${esc(p.id)}">Quitar</button>
+              </div>
+            </div>`).join('')}
+          <p class="total"><span>Total</span><strong>${fmt(totalCarrito())}</strong></p>
+          <button type="button" class="btn" id="btn-pedido" data-accion="hacer-pedido">Hacer pedido y pagar por transferencia</button>
+          <p class="desc">Al confirmar te damos un folio y los datos para transferir.</p>`
+        : '<p class="desc">Tu carrito está vacío.</p>'}
+      </div>`, 'ancho');
+  }
+
+  async function hacerPedido() {
+    const items = Object.entries(carrito).map(([id, cantidad]) => ({ id, cantidad }));
+    if (!items.length) return;
+    const boton = $('#btn-pedido');
+    if (boton) { boton.disabled = true; boton.textContent = 'Registrando pedido…'; }
+    try {
+      const res = await api('POST', { action: 'pedido', items });
+      if (!res.ok) throw new Error(res.error);
+      carrito = {};
+      guardarCarrito();
+      actualizarContador();
+      mostrarPedido(res.data);
+      cargar();
+    } catch (e) {
+      toast('No se pudo registrar el pedido: ' + e.message);
+      cargar();
+      verCarrito();
+    }
+  }
+
+  function mostrarPedido(d) {
+    const texto = `Hola, ya hice el pago de mi pedido ${d.folio} por ${fmt(d.total)}: ` +
+      d.lineas.map(l => `${l.cantidad} x ${l.nombre}`).join(', ') +
+      '. Te mando el comprobante. ¿Acordamos la entrega?';
+    const waUrl = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(texto)}`;
+    abrirModal(`
+      <div class="carrito">
+        <h2>Pedido ${esc(d.folio)}</h2>
+        <p class="desc">Total a transferir: <strong>${fmt(d.total)}</strong></p>
+        <p class="desc">Haz tu transferencia a:<br>
+          Banco: ${esc(PAGO.banco)}<br>
+          Titular: ${esc(PAGO.titular)}<br>
+          CLABE: ${esc(PAGO.clabe)}</p>
+        <p class="desc">Usa el folio <strong>${esc(d.folio)}</strong> como concepto de la transferencia.
+          Después envía tu comprobante por WhatsApp para acordar la entrega.</p>
+        <a class="btn" href="${waUrl}" target="_blank" rel="noopener">Enviar comprobante por WhatsApp</a>
+      </div>`, 'ancho');
+  }
+
+  // ---------- Administración ----------
+
+  function abrirAdmin() {
+    adminAbierto = true;
+    $('#admin').classList.add('abierto');
+    if (token) mostrarPanel();
+    else {
+      $('#admin-login').hidden = false;
+      $('#admin-panel').hidden = true;
+    }
+    $('#admin').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function mostrarPanel() {
+    $('#admin-login').hidden = true;
+    $('#admin-panel').hidden = false;
+    cambiarTab('pedidos');
+  }
+
+  function salirAdmin() {
+    token = '';
+    sessionStorage.removeItem('token');
+    $('#admin-login').hidden = false;
+    $('#admin-panel').hidden = true;
+  }
+
+  function cambiarTab(tab) {
+    document.querySelectorAll('.tab').forEach(b => b.classList.toggle('activo', b.dataset.tab === tab));
+    $('#tab-pedidos').hidden = tab !== 'pedidos';
+    $('#tab-piezas').hidden = tab !== 'piezas';
+    if (tab === 'pedidos') cargarPedidos();
+    else renderAdmin();
+  }
+
+  // Envía una acción de administración; devuelve los datos o null si falló
+  async function ejecutarAdmin(accion, extra, okMsg) {
+    try {
+      const res = await api('POST', { action: accion, ...extra });
+      if (!res.ok) {
+        if (res.error === 'No autorizado') salirAdmin();
+        throw new Error(res.error);
+      }
+      toast(okMsg);
+      return res.data;
+    } catch (e) {
+      toast('Error: ' + e.message);
+      return null;
+    }
+  }
+
+  async function cargarPedidos() {
+    $('#pedidos-lista').innerHTML = '<p class="desc">Cargando pedidos…</p>';
+    const data = await ejecutarAdmin('listarPedidos', {}, '');
+    if (!data) { $('#pedidos-lista').innerHTML = ''; return; }
+    $('#pedidos-lista').innerHTML = data.map(p => `
+      <div class="pedido">
+        <div class="pedido-cab">
+          <strong>${esc(p.folio)}</strong>
+          <span class="estado ${esc(p.estado)}">${esc(p.estado)}</span>
+        </div>
+        <div class="desc">${new Date(p.fecha).toLocaleString(LOCALE)} · Total ${fmt(p.total)}</div>
+        <ul class="pedido-lineas">${p.lineas.map(l => `<li>${esc(l.cantidad)} × ${esc(l.nombre)}</li>`).join('')}</ul>
+        ${p.estado === 'pendiente' ? `
+          <div class="botones">
+            <button class="btn" type="button" data-accion="pagado" data-folio="${esc(p.folio)}">Marcar pagado</button>
+            <button class="btn peligro" type="button" data-accion="cancelar" data-folio="${esc(p.folio)}">Cancelar</button>
+          </div>` : ''}
+      </div>`).join('') || '<p class="desc">Aún no hay pedidos.</p>';
+  }
 
   function renderAdmin() {
+    $('#cats').innerHTML = categorias().map(c => `<option value="${esc(c)}">`).join('');
     $('#admin-lista').innerHTML = productos.map(p => `
       <div class="fila">
-        <div class="datos">${esc(p.nombre)}<span>${fmt(p.precio)} · stock ${esc(p.stock)}</span></div>
+        <div class="datos">${esc(p.nombre)}<span>${fmt(p.precio)} · stock ${esc(p.stock)}${p.categoria ? ' · ' + esc(p.categoria) : ''}</span></div>
         <div class="botones">
-          <button class="btn sec" data-editar="${esc(p.id)}">Editar</button>
-          <button class="btn peligro" data-borrar="${esc(p.id)}">Quitar</button>
+          <button class="btn sec" type="button" data-editar="${esc(p.id)}">Editar</button>
+          <button class="btn peligro" type="button" data-borrar="${esc(p.id)}">Quitar</button>
         </div>
-      </div>`).join('') || '<p class="vacio">Aún no hay piezas.</p>';
-  }
-
-  function toggleAdmin() {
-    if (!adminAbierto && !token) {
-      const t = prompt('Clave de administración:');
-      if (!t) return;
-      token = t.trim();
-      sessionStorage.setItem('token', token);
-    }
-    adminAbierto = !adminAbierto;
-    $('#admin').classList.toggle('abierto', adminAbierto);
-    if (adminAbierto) {
-      renderAdmin();
-      $('#admin').scrollIntoView({ behavior: 'smooth' });
-    }
+      </div>`).join('') || '<p class="desc">Sin piezas.</p>';
   }
 
   function limpiarForm() {
     $('#f-id').value = '';
-    ['nombre', 'descripcion', 'precio', 'stock', 'imagen'].forEach(c => $('#f-' + c).value = '');
+    ['nombre', 'descripcion', 'precio', 'stock', 'categoria', 'imagen'].forEach(c => $('#f-' + c).value = '');
     $('#f-titulo').textContent = 'Nueva pieza';
   }
 
@@ -314,80 +597,134 @@
     $('#f-descripcion').value = p.descripcion;
     $('#f-precio').value = p.precio;
     $('#f-stock').value = p.stock;
+    $('#f-categoria').value = p.categoria;
     $('#f-imagen').value = p.imagen;
     $('#f-titulo').textContent = 'Editando: ' + p.nombre;
     $('#form').scrollIntoView({ behavior: 'smooth' });
   }
 
-  async function ejecutar(action, extra) {
-    msg('Guardando…');
-    try {
-      const res = await api('POST', { action, ...extra });
-      if (!res.ok) {
-        if (res.error === 'No autorizado') {
-          token = '';
-          sessionStorage.removeItem('token');
-        }
-        throw new Error(res.error);
-      }
-      await cargar();
-      msg('Cambios guardados');
-    } catch (e) {
-      msg('Error: ' + e.message, true);
-    }
-  }
-
-  async function guardar(ev) {
+  async function guardarPieza(ev) {
     ev.preventDefault();
     const producto = {
       nombre: $('#f-nombre').value.trim(),
       descripcion: $('#f-descripcion').value.trim(),
       precio: Number($('#f-precio').value),
       stock: Number($('#f-stock').value || 0),
+      categoria: $('#f-categoria').value.trim(),
       imagen: $('#f-imagen').value.trim()
     };
     const id = $('#f-id').value;
     if (id) producto.id = id;
-    await ejecutar(id ? 'actualizar' : 'agregar', { producto });
-    limpiarForm();
+    const ok = await ejecutarAdmin(id ? 'actualizar' : 'agregar', { producto }, 'Pieza guardada');
+    if (ok) {
+      limpiarForm();
+      await cargar();
+    }
   }
 
-  async function quitar(id) {
+  async function quitarPieza(id) {
     const p = productos.find(x => x.id === id);
     if (!p || !confirm(`¿Quitar "${p.nombre}" de la colección?`)) return;
-    await ejecutar('borrar', { id });
+    if (await ejecutarAdmin('borrar', { id }, 'Pieza quitada')) await cargar();
   }
 
-  // ====== EVENTOS ======
+  // ---------- Eventos ----------
+
   $('#buscar').addEventListener('input', render);
-  $('#form').addEventListener('submit', guardar);
-  $('#f-cancelar').addEventListener('click', limpiarForm);
-  $('#grid').addEventListener('click', (ev) => {
-    const card = ev.target.closest('[data-ver]');
-    if (card) verDetalle(card.dataset.ver);
-  });
-  $('#modal').addEventListener('click', (ev) => {
-    if (ev.target.id === 'modal' || ev.target.id === 'cerrar-modal') cerrarDetalle();
-  });
-  $('#modal-cuerpo').addEventListener('click', (ev) => {
-    if (ev.target.id !== 'c-comprar') return;
-    $('#c-detalle').hidden = false;
-    ev.target.hidden = true;
-    actualizarCompra();
-  });
-  $('#modal-cuerpo').addEventListener('input', (ev) => {
-    if (ev.target.id === 'c-cantidad') actualizarCompra();
-  });
-  document.addEventListener('keydown', (ev) => { if (ev.key === 'Escape') cerrarDetalle(); });
-  $('#admin-lista').addEventListener('click', (ev) => {
-    const ed = ev.target.dataset.editar;
-    const bo = ev.target.dataset.borrar;
-    if (ed) editar(ed);
-    if (bo) quitar(bo);
+  $('#btn-carrito').addEventListener('click', verCarrito);
+
+  $('#filtros').addEventListener('click', (ev) => {
+    const chip = ev.target.closest('[data-cat]');
+    if (!chip) return;
+    categoriaActiva = chip.dataset.cat;
+    renderFiltros();
+    render();
   });
 
-  // El panel de administración no tiene botón visible: se abre solo con la dirección …/catalogo-productos/#admin
-  if (location.hash === '#admin') toggleAdmin();
+  $('#grid').addEventListener('click', (ev) => {
+    const card = ev.target.closest('[data-ver]');
+    if (card) verProducto(card.dataset.ver);
+  });
+
+  $('#modal').addEventListener('click', (ev) => {
+    if (ev.target.id === 'modal' || ev.target.closest('#cerrar-modal')) cerrarModal();
+  });
+
+  $('#modal-cuerpo').addEventListener('click', (ev) => {
+    const b = ev.target.closest('[data-accion]');
+    if (!b) return;
+    const { accion, id } = b.dataset;
+    if (accion === 'agregar') agregarAlCarrito(id);
+    if (accion === 'qmas') cambiarCantidad(id, 1);
+    if (accion === 'qmenos') cambiarCantidad(id, -1);
+    if (accion === 'quitar') {
+      delete carrito[id];
+      guardarCarrito();
+      actualizarContador();
+      verCarrito();
+    }
+    if (accion === 'hacer-pedido') hacerPedido();
+  });
+
+  document.addEventListener('keydown', (ev) => { if (ev.key === 'Escape') cerrarModal(); });
+
+  $('#form-login').addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    token = $('#l-clave').value.trim();
+    try {
+      const res = await api('POST', { action: 'verificar' });
+      if (!res.ok) throw new Error(res.error);
+      sessionStorage.setItem('token', token);
+      $('#l-clave').value = '';
+      mostrarPanel();
+    } catch (e) {
+      token = '';
+      toast(e.message === 'No autorizado' ? 'Clave incorrecta' : 'No se pudo entrar: ' + e.message);
+    }
+  });
+
+  $('#admin').addEventListener('click', async (ev) => {
+    const b = ev.target.closest('button');
+    if (!b) return;
+    if (b.dataset.tab) return cambiarTab(b.dataset.tab);
+    if (b.id === 'salir-admin') return salirAdmin();
+    if (b.dataset.editar) return editar(b.dataset.editar);
+    if (b.dataset.borrar) return quitarPieza(b.dataset.borrar);
+    if (b.dataset.accion === 'pagado' || b.dataset.accion === 'cancelar') {
+      const pagar = b.dataset.accion === 'pagado';
+      const pregunta = pagar
+        ? '¿Confirmar el pago? Se descuenta el stock de las piezas.'
+        : '¿Cancelar este pedido? Las piezas vuelven a quedar disponibles.';
+      if (!confirm(pregunta)) return;
+      const accion = pagar ? 'marcarPagado' : 'cancelarPedido';
+      if (await ejecutarAdmin(accion, { folio: b.dataset.folio }, 'Pedido actualizado')) {
+        cargarPedidos();
+        cargar();
+      }
+    }
+  });
+
+  $('#form').addEventListener('submit', guardarPieza);
+  $('#f-cancelar').addEventListener('click', limpiarForm);
+
+  $('#f-foto').addEventListener('change', async (ev) => {
+    const archivo = ev.target.files[0];
+    if (!archivo) return;
+    toast('Subiendo foto…');
+    try {
+      const base64 = await comprimir(archivo);
+      const nombre = $('#f-nombre').value.trim() || 'pieza';
+      const data = await ejecutarAdmin('subirFoto', { nombre, base64 }, 'Foto subida');
+      if (data) $('#f-imagen').value = data.url;
+    } catch (e) {
+      toast('Error: ' + e.message);
+    } finally {
+      ev.target.value = '';
+    }
+  });
+
+  // El panel de administración no tiene botón visible: se abre con la dirección …/catalogo-productos/#admin
+  if (location.hash === '#admin') abrirAdmin();
 
   cargar();
 </script>
