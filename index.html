@@ -76,6 +76,12 @@
   .modal-texto { padding: 36px 32px; display: flex; flex-direction: column; gap: 12px; justify-content: center; }
   .modal-texto h2 { font-family: var(--serif); font-size: 2rem; font-weight: 500; margin: 0; }
   .modal-texto .desc { color: var(--suave); }
+  .compra { display: grid; gap: 12px; margin-top: 8px; }
+  .compra label { display: grid; gap: 6px; }
+  .compra input { max-width: 120px; }
+  .compra .btn { text-align: center; text-decoration: none; display: inline-block; }
+  #c-detalle { display: grid; gap: 10px; }
+  #c-detalle[hidden], #c-comprar[hidden] { display: none; }
   .cerrar {
     position: absolute; top: 10px; right: 14px; background: none; border: none; font-size: 1.6rem;
     color: var(--suave); cursor: pointer; line-height: 1; z-index: 1;
@@ -145,6 +151,11 @@
   const API_URL = 'https://script.google.com/macros/s/AKfycbz7jsNiNl5Mn1bPOQKkegkqOhXnWffAAqP-_7QokVyn4kkM_tJSxkSgQ9_HSXNcpAgG9Q/exec';
   const MONEDA = 'MXN';
   const LOCALE = 'es-MX';
+  // ====== PAGO Y CONTACTO ======
+  // WhatsApp: código de país + número, solo dígitos (ej. 5215512345678)
+  const WHATSAPP = 'POR_DEFINIR';
+  // Datos para la transferencia que verán los clientes
+  const PAGO = { banco: 'POR DEFINIR', titular: 'POR DEFINIR', clabe: 'POR DEFINIR' };
   // ===========================
 
   let productos = [];
@@ -215,6 +226,8 @@
   function verDetalle(id) {
     const p = productos.find(x => x.id === id);
     if (!p) return;
+    const disponible = p.stock > 0;
+    $('#modal-cuerpo').dataset.id = p.id;
     $('#modal-cuerpo').innerHTML = `
       <button class="cerrar" id="cerrar-modal" aria-label="Cerrar">×</button>
       ${fotoHTML(p)}
@@ -222,9 +235,41 @@
         <h2>${esc(p.nombre)}</h2>
         <div class="precio">${fmt(p.precio)}</div>
         <p class="desc">${esc(p.descripcion) || 'Pieza de la colección.'}</p>
-        <p class="desc">${p.stock > 0 ? 'Piezas disponibles: ' + esc(p.stock) : 'Por el momento agotada.'}</p>
+        <p class="desc">${disponible ? 'Piezas disponibles: ' + esc(p.stock) : 'Por el momento agotada.'}</p>
+        ${disponible ? compraHTML(p) : ''}
       </div>`;
     $('#modal').classList.add('abierto');
+  }
+
+  function compraHTML(p) {
+    return `
+      <div class="compra">
+        <label class="desc">Cantidad
+          <input id="c-cantidad" type="number" min="1" max="${esc(p.stock)}" value="1">
+        </label>
+        <button class="btn" id="c-comprar" type="button">Comprar por transferencia</button>
+        <div id="c-detalle" hidden>
+          <p class="desc">Total: <strong id="c-total"></strong></p>
+          <p class="desc">Haz tu transferencia a:<br>
+            Banco: ${esc(PAGO.banco)}<br>
+            Titular: ${esc(PAGO.titular)}<br>
+            CLABE: ${esc(PAGO.clabe)}</p>
+          <p class="desc">Cuando tengas tu comprobante, envíalo por WhatsApp para acordar la entrega.</p>
+          <a id="c-wa" class="btn" target="_blank" rel="noopener">Enviar comprobante por WhatsApp</a>
+        </div>
+      </div>`;
+  }
+
+  // Calcula el total y el enlace de WhatsApp con la cantidad elegida
+  function actualizarCompra() {
+    const p = productos.find(x => x.id === $('#modal-cuerpo').dataset.id);
+    if (!p) return;
+    const cant = Math.min(Math.max(1, Math.floor(Number($('#c-cantidad').value) || 1)), Number(p.stock));
+    $('#c-cantidad').value = cant;
+    const total = cant * p.precio;
+    $('#c-total').textContent = fmt(total);
+    const texto = `Hola, ya hice el pago por transferencia de ${cant} x ${p.nombre}. Total: ${fmt(total)}. Te mando el comprobante. ¿Acordamos la entrega?`;
+    $('#c-wa').href = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(texto)}`;
   }
 
   function cerrarDetalle() { $('#modal').classList.remove('abierto'); }
@@ -323,6 +368,15 @@
   });
   $('#modal').addEventListener('click', (ev) => {
     if (ev.target.id === 'modal' || ev.target.id === 'cerrar-modal') cerrarDetalle();
+  });
+  $('#modal-cuerpo').addEventListener('click', (ev) => {
+    if (ev.target.id !== 'c-comprar') return;
+    $('#c-detalle').hidden = false;
+    ev.target.hidden = true;
+    actualizarCompra();
+  });
+  $('#modal-cuerpo').addEventListener('input', (ev) => {
+    if (ev.target.id === 'c-cantidad') actualizarCompra();
   });
   document.addEventListener('keydown', (ev) => { if (ev.key === 'Escape') cerrarDetalle(); });
   $('#admin-lista').addEventListener('click', (ev) => {
